@@ -7,6 +7,8 @@ from reportlab.graphics import shapes
 from reportlab.lib import colors
 from openpyxl import load_workbook
 
+DEBUG = 0
+
 specs = labels.Specification(216, 280, #Sheet size in MM
                             2, 5, # Columns then rows
                             101.6, 50.8, #label size in MM
@@ -71,16 +73,19 @@ for iter_grade in ("K", "1", "2", "3", "4", "5"): #Iterate through grades in ord
     for row in ws.iter_rows(min_row=3, max_col=10, values_only=True): #Now scan the spreadsheet
         if row[2] == "SE-POPCORN": #Only look at Popcorn
             if row[0] is not None and row[0] != "Unknown": #Only look at properly specified teachers
-                # print(row[0])
+                if DEBUG:
+                    print(row[0])
                 field = row[0].split(' ') # Split Mary Brown (3) into three parts
-                # print(field)
+                if DEBUG:
+                    print(field)
                 teacher = field[1] # Only need the last name
                 grade = field[2][1] # Only need the grade letter
                 num_students = row[6] # Grab the number of purchases per class
                 # I can't figure out how to pass 3 different arguments to add_label so send as CSV variable
                 name = "A," + teacher + ',' + str(grade) + ',' + str(num_students)
                 if (grade == iter_grade): # Only add the correct grade
-                    # print(name) # For Debug only
+                    if DEBUG:
+                        print(name)
                     sheet.add_label(name.strip()) #Add the label for each class, not sure I need the strip
             else:
                 if iter_grade == "K":
