@@ -4,7 +4,9 @@ A cool little Python Script that I use to create labels for the Popcorn operatio
 
 Hardest part about this is installing pylabels
 
-```pip3 install pylabels
+```
+pip3 install pylabels
 pip3 install reportlab
-pip3 install openpyxl```
+pip3 install openpyxl
+```
 
