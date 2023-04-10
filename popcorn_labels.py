@@ -1,10 +1,7 @@
 import labels
 import time
 import os.path
-# from reportlab.pdfbase.ttfonts import TTFont
-# from reportlab.pdfbase.pdfmetrics import registerFont, stringWidth
 from reportlab.graphics import shapes
-# from reportlab.lib import colors
 from openpyxl import load_workbook
 
 DEBUG = 0
