@@ -16,9 +16,11 @@ specs = labels.Specification(216, 280,  # Sheet size in MM
                              row_gap=0)  # No gap between labels
 
 # Array of Teachers that have a teacher helper so they need two bags of popcorn
-TwoTeachers = ["Martinez", "Espich", "Estes", "Kight", "Hernandez", "Silvia", "Ellis"]
+# TwoTeachers = ["Martinez", "Espich", "Estes", "Kight", "Hernandez", "Silvia", "Ellis"]
+TwoTeachers = ["Dunagan", "Brightwell", "Espich", "Flaherty", "Chamness", "Brookshire", "Park", "Corbett", "Ellis"]
 # Array of Teachers that have two?! teacher helpers so they need three bags of popcorn
-ThreeTeachers = ["Estes"]
+# ThreeTeachers = ["Estes"]
+ThreeTeachers = []
 # Dictionary to help pretty print of grade
 Gradedict = {"K": "KG", "1": "1st", "2": "2nd", "3": "3rd", "4": "4th", "5": "5th"}
 
