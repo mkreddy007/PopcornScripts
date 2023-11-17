@@ -107,8 +107,8 @@ sheet.add_label("B,Learning Lab,(To Office Front Desk),10 Bags")
 sheet.add_label("B,Learning Lab,(To Office Front Desk),10 Bags")
 sheet.add_label("B,Library,Deliver to the Library,10 Bags")
 sheet.add_label("B,Library,Deliver to the Library,10 Bags")
-sheet.add_label("B,Office,(To Office Front Desk),15 Bags")
-sheet.add_label("B,Office,(To Office Front Desk),15 Bags")
+sheet.add_label("B,Office,(To Office Front Desk),20 Bags")
+sheet.add_label("B,Office,(To Office Front Desk),20 Bags")
 
 timestr = time.strftime("%m_%d_%y")
 pdfFileName = "popcorn_" + timestr + ".pdf"
