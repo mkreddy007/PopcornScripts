@@ -4,7 +4,7 @@ import os.path
 from reportlab.graphics import shapes
 from openpyxl import load_workbook
 
-DEBUG = 0
+DEBUG = False
 
 specs = labels.Specification(216, 280,  # Sheet size in MM
                              2, 5,  # Columns then rows
@@ -16,13 +16,38 @@ specs = labels.Specification(216, 280,  # Sheet size in MM
                              row_gap=0)  # No gap between labels
 
 # Array of Teachers that have a teacher helper so they need two bags of popcorn
-# TwoTeachers = ["Martinez", "Espich", "Estes", "Kight", "Hernandez", "Silvia", "Ellis"]
-TwoTeachers = ["Dunagan", "Brightwell", "Espich", "Flaherty", "Chamness", "Brookshire", "Park", "Corbett", "Ellis"]
+TwoTeachers = ["Davis", "Tharp", "Espich", "Najjar", "Chamness", "Brookshire", "Park", "Ellis"]
 # Array of Teachers that have two?! teacher helpers so they need three bags of popcorn
 # ThreeTeachers = ["Estes"]
 ThreeTeachers = []
 # Dictionary to help pretty print of grade
-Gradedict = {"K": "KG", "1": "1st", "2": "2nd", "3": "3rd", "4": "4th", "5": "5th"}
+GradeDict = {"K": "KG", "1": "1st", "2": "2nd", "3": "3rd", "4": "4th", "5": "5th"}
+TeacherDict = {"Berrios": "5",
+               "Bogin": "1",
+               "Brightwell": "1",
+               "Brookshire": "4",
+               "Chamness": "3",
+               "Corbett": "4",
+               "Davis": "K",
+               "Dunagan": "1",
+               "Ellis": "4",
+               "Espich": "2",
+               "Falsone": "2",
+               "Grant": "3",
+               "Griffith": "2",
+               "Hemphill": "3",
+               "Hernandez": "4",
+               "Hurst": "K",
+               "Martin": "1",
+               "Martinez": "K",
+               "Najjar": "5",
+               "Park": "5",
+               "Platt": "4",
+               "Richardson": "2",
+               "Schiff": "5",
+               "Slawson": "2",
+               "Tharp": "3",
+               }
 
 # Create a function to draw each label. This will be given the ReportLab drawing
 # object to draw on, the dimensions (NB. these will be in points, the unit
@@ -34,7 +59,7 @@ def write_name(label, width, height, name):
     format, teacher, grade, num_students = name.split(",")
     if format == "A":
         # Print Pretty Grade and teacher name in a bigger font
-        label.add(shapes.String(width / 2.0, 100, Gradedict[grade] + ": " + teacher, fontName="Helvetica", fontSize=36, textAnchor="middle"))
+        label.add(shapes.String(width / 2.0, 100, GradeDict[grade] + ": " + teacher, fontName="Helvetica", fontSize=36, textAnchor="middle"))
         # Print number of Students in a normal font
         label.add(shapes.String(width / 2.0, 60, num_students + " Students", fontName="Helvetica", fontSize=24, textAnchor="middle"))
         # Split up Teacher and Total sum based on TwoTeacher Array
@@ -75,14 +100,17 @@ for iter_grade in ("K", "1", "2", "3", "4", "5"):  # Iterate through grades in o
     for row in ws.iter_rows(min_row=3, max_col=10, values_only=True):  # Now scan the spreadsheet
         if row[2] == "SE-POPCORN":  # Only look at Popcorn
             if row[0] is not None and row[0] != "Unknown":  # Only look at properly specified teachers
-                if DEBUG:
-                    print(row[0])
-                field = row[0].split(' ')  # Split Mary Brown (3) into three parts
-                if DEBUG:
-                    print(field)
-                teacher = field[1]  # Only need the last name
-                grade = field[2][1]  # Only need the grade letter
-                num_students = row[6]  # Grab the number of purchases per class
+                # if DEBUG:
+                # print(row[0])
+                # field = row[0].split(' ')  # Split Mary Brown (3) into three parts
+                # if DEBUG:
+                # print(field)
+                teacher = row[0]  # Only need the last name
+                grade = TeacherDict[teacher]  # Grab the teacher from the dict
+                if teacher == "Brightwell":
+                    num_students = row[6] + 1  # Grab the number of purchases per class
+                else:
+                    num_students = row[6]  # Grab the number of purchases per class
                 # I can't figure out how to pass 3 different arguments to add_label so send as CSV variable
                 name = "A," + teacher + ',' + str(grade) + ',' + str(num_students)
                 if (grade == iter_grade):  # Only add the correct grade
@@ -90,25 +118,24 @@ for iter_grade in ("K", "1", "2", "3", "4", "5"):  # Iterate through grades in o
                         print(name)
                     sheet.add_label(name.strip())  # Add the label for each class, not sure I need the strip
             else:
-                if iter_grade == "K":
-                    print("ERROR: " + str(row[6]) + " Kids don't have their teacher specified properly")
+                print("ERROR: " + str(row[6]) + " Kids don't have their teacher specified properly")
 
 sheet.add_label("B,CDC Staff,Portable Bldg,8 Bags")
 sheet.add_label("B,,,")
 sheet.add_label("B,,,")
 sheet.add_label("B,Cafeteria,1/2 to 3/4 plastic bag,of loose popcorn")
-sheet.add_label("B,Specials,(To Office Front Desk),8 Bags")
+sheet.add_label("B,Specials,(To Office Front Desk),10 Bags")
 
-sheet.add_label("B,Bus Drivers,Deliver to Library,10 Bags")
-sheet.add_label("B,Bus Drivers,Deliver to Library,10 Bags")
-sheet.add_label("C,Custodial Office,Inside Kinder/1st Workroom,6 Bags")
-sheet.add_label("C,Custodial Office,Inside Kinder/1st Workroom,6 Bags")
-sheet.add_label("B,Learning Lab,(To Office Front Desk),10 Bags")
-sheet.add_label("B,Learning Lab,(To Office Front Desk),10 Bags")
-sheet.add_label("B,Library,Deliver to the Library,10 Bags")
-sheet.add_label("B,Library,Deliver to the Library,10 Bags")
-sheet.add_label("B,Office,(To Office Front Desk),20 Bags")
-sheet.add_label("B,Office,(To Office Front Desk),20 Bags")
+sheet.add_label("B,Bus Drivers,Deliver to Library,8 Bags")
+sheet.add_label("B,Bus Drivers,Deliver to Library,8 Bags")
+sheet.add_label("C,Custodial Office,Inside Kinder/1st Workroom,8 Bags")
+sheet.add_label("C,Custodial Office,Inside Kinder/1st Workroom,8 Bags")
+sheet.add_label("B,Learning Lab,(To Office Front Desk),22 Bags")
+sheet.add_label("B,Learning Lab,(To Office Front Desk),22 Bags")
+sheet.add_label("B,Library,Deliver to the Library,8 Bags")
+sheet.add_label("B,Library,Deliver to the Library,8 Bags")
+sheet.add_label("B,Office,(To Office Front Desk),22 Bags")
+sheet.add_label("B,Office,(To Office Front Desk),22 Bags")
 
 timestr = time.strftime("%m_%d_%y")
 pdfFileName = "popcorn_" + timestr + ".pdf"
