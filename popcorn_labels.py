@@ -107,10 +107,7 @@ for iter_grade in ("K", "1", "2", "3", "4", "5"):  # Iterate through grades in o
                 # print(field)
                 teacher = row[0]  # Only need the last name
                 grade = TeacherDict[teacher]  # Grab the teacher from the dict
-                if teacher == "Brightwell":
-                    num_students = row[6] + 1  # Grab the number of purchases per class
-                else:
-                    num_students = row[6]  # Grab the number of purchases per class
+                num_students = row[6]  # Grab the number of purchases per class
                 # I can't figure out how to pass 3 different arguments to add_label so send as CSV variable
                 name = "A," + teacher + ',' + str(grade) + ',' + str(num_students)
                 if (grade == iter_grade):  # Only add the correct grade
