@@ -96,26 +96,29 @@ for file in os.listdir("../Downloads/"):
 # wb = load_workbook('../Downloads/a.xlsx') #load the excel sheet
 ws = wb.active
 
+# Create a dictionary to store combined orders for each teacher
+teacher_orders = {}
+
+# First pass: accumulate all orders
+for row in ws.iter_rows(min_row=3, max_col=10, values_only=True):  # Now scan the spreadsheet
+    if row[2] in ["SE-POPCORN", "SE-POPCORN-SPRING-ONLY"]:  # Check for both popcorn types
+        if row[0] is not None and row[0] != "Unknown":  # Only look at properly specified teachers
+            teacher = row[0]  # Only need the last name
+            if teacher not in teacher_orders:
+                teacher_orders[teacher] = 0
+            teacher_orders[teacher] += row[6]  # Add to the running total for this teacher
+        else:
+            print("ERROR: " + str(row[6]) + " Kids don't have their teacher specified properly")
+
+# Second pass: create labels using combined totals
 for iter_grade in ("K", "1", "2", "3", "4", "5"):  # Iterate through grades in order
-    for row in ws.iter_rows(min_row=3, max_col=10, values_only=True):  # Now scan the spreadsheet
-        if row[2] == "SE-POPCORN":  # Only look at Popcorn
-            if row[0] is not None and row[0] != "Unknown":  # Only look at properly specified teachers
-                # if DEBUG:
-                # print(row[0])
-                # field = row[0].split(' ')  # Split Mary Brown (3) into three parts
-                # if DEBUG:
-                # print(field)
-                teacher = row[0]  # Only need the last name
-                grade = TeacherDict[teacher]  # Grab the teacher from the dict
-                num_students = row[6]  # Grab the number of purchases per class
-                # I can't figure out how to pass 3 different arguments to add_label so send as CSV variable
-                name = "A," + teacher + ',' + str(grade) + ',' + str(num_students)
-                if (grade == iter_grade):  # Only add the correct grade
-                    if DEBUG:
-                        print(name)
-                    sheet.add_label(name.strip())  # Add the label for each class, not sure I need the strip
-            else:
-                print("ERROR: " + str(row[6]) + " Kids don't have their teacher specified properly")
+    for teacher, num_students in teacher_orders.items():
+        grade = TeacherDict[teacher]  # Grab the teacher from the dict
+        name = "A," + teacher + ',' + str(grade) + ',' + str(num_students)
+        if (grade == iter_grade):  # Only add the correct grade
+            if DEBUG:
+                print(name)
+            sheet.add_label(name.strip())  # Add the label for each class
 
 sheet.add_label("B,CDC Staff,Portable Bldg,8 Bags")
 sheet.add_label("B,,,")
